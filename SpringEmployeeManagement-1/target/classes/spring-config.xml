@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	
+	<bean id="service" class="com.lti.service.EmployeeServiceImpl" >
+	<property name="dao" ref="dao"></property>
+	</bean>
+	
+	<bean id="employee" class="com.lti.model.Employee" scope="prototype">
+	<!-- setting all three properties of employee and default constructor will be called. called as setter injection-->
+	  <property name="employeeId" value="1000"/><!-- this will call the setter method and set the value -->
+	  <property name="employeeName" value="Aneri"/>
+	  <property name="employeeSalary" value="5000"/>
+	  <!-- referring to address bean created below...  -->
+	  <property name="address" ref="address"></property>
+	</bean>
+	
+	<!-- to explicitly call the parameterized constructor -->
+	<bean id="employee2" class="com.lti.model.Employee" scope="prototype">
+	<constructor-arg index="0" value="1000"/> <!-- index means the sequence in which they are defined in parameter of constructor -->
+	<constructor-arg index="1" value="Aneri"/>
+	<constructor-arg index="2" value="5600"/>
+	<!-- address will take by setter injection means setAddress is called when this executes and values will be taken from address
+	 bean below -->
+	<property name="address" ref="address"/>
+	
+	</bean>
+	
+	<bean id="address" class="com.lti.model.Address" scope="prototype">
+	   <property name="street" value="ABC Road"/>
+	   <property name="city" value="Mumbai"/>
+	   <property name="pin" value="400706"/>
+	</bean>
+	
+	<bean id="dao" class="com.lti.dao.EmployeeDaoImpl">
+	<property name="employees">
+	     <!-- now this property is the list so value will be in list tag-->
+	     <list>
+	         <ref bean="employee"/> <!-- value of list elements is of Employee class -->
+	     </list>
+	</property>
+	</bean>
+
+</beans>
